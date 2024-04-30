@@ -139,6 +139,7 @@ def archive_item(id):
 def printqr(id):
     img = qrcode.make(id)
     type(img)  # qrcode.image.pil.PilImage
+    Path("static/tmp/").mkdir(parents=True, exist_ok=True)
     img.save("static/tmp/qr.png")
     info = request.form
     return render_template('label.html', info=info)
