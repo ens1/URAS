@@ -1,2 +1,1 @@
-#URAS
-Universal Resource Allocation System
+# URAS - Universal Resource Allocation System
