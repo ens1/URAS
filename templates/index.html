@@ -1,0 +1,53 @@
+{%extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{%block body%}
+<table class="table table-striped">
+        <td>
+            <table class="table table-striped">
+                <thead>
+                    <th class="text-center"> Newest Items</th>
+                </thead>
+                <tbody>
+                {%for item in items%}
+                <tr>
+                <td>
+                    <a href={{url_for("item_by_id", item_id=item.get("_id"))}}>{{item.get("Part Number")}}</a> - {{item.get("Description")}}
+                </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+            </table>
+        </td>
+        <td>
+            <table class="table table-striped">
+            <thead>
+                <th class="text-center">Newest Locations</th>
+            </thead>
+            <tbody>
+            {%for location in locations%}
+            <tr>
+            <td>
+                <a href={{url_for('location_by_id', location_id=location.get("Name"))}}>{{location.get("Name")}}</a>
+            </tr>
+            {%endfor%}
+
+            <table class="table table-striped">
+                <thead>
+                    <th class="text-center">Items with Zero Inventory</th>
+                </thead>
+                <tbody>
+                {%for item in zero%}
+                <tr>
+                <td>
+                    <a href={{url_for("item_by_id", item_id=item.get("_id"))}}>{{item.get("Part Number")}}</a>
+                </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+            </table>
+            </tbody>
+            </table>
+        </td>
+        
+    </table>
+{%endblock%}

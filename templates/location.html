@@ -1,0 +1,44 @@
+{%extends 'base.html' %}
+{% block title %}{{document.get("Name")}}{% endblock %}
+{%block body%}
+    <h1>{{document.get('Name')}}</h1>
+    <div class="float-right">
+        <form action="/printqr/{{document.get('Name')}}" method="post">
+            <input type="submit" class="btn btn-primary float-right" value="Print Label">
+            <input type="hidden" id="Location Name" name="Location Name" value="{{document.get('Name')}}">
+        </form>
+        </div>
+    {%if document["Image"]%}
+    <img src="/{{document['Image']}}" height="800px">
+    {%else%}
+    <p></p>
+    {%endif%}
+    <form action="/upload/inventory_locations/{{document['Name']}}/image" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload New Image For Item">
+    </form>
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Location</th>
+            <th>Items</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in document.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            
+            {% if key == "Items" %}
+            <td>{% for item in value %}<a href = {{url_for("item_by_id", item_id = item[2])}}>{{item[0]}}</a> - {{item[1]}}  {%endfor%}</td>
+            {%else%}
+            <td>{{ value }}</td>
+            {%endif%}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+{%endblock%}

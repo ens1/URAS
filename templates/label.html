@@ -1,0 +1,23 @@
+<head>
+    <style>
+    div {
+      height: 2.5cm;
+      width: 7.5cm;
+      margin: auto;
+    }
+    </style>
+    </head>
+<div>
+<table>
+    <tr>
+        <td rowspan="{{info|length + 1}}" ><img src="/static/tmp/qr.png"width="100%"></td>
+    </tr>
+    {%for key, value in info.items()%}
+    <tr>
+        <td>
+            {{key}}: {{value}}
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+</div>

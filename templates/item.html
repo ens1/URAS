@@ -1,0 +1,112 @@
+{%extends 'base.html' %}
+
+{% block title %}{{document.get("Part Number")}}{% endblock %}
+{%block body%}
+    <h1>{{document.get("Part Number")}}</h1>
+    <div class="float-right">
+        <form action="/printqr/{{document.get('_id')}}" method="post">
+            <input type="submit" class="btn btn-primary float-right" value="Print Label">
+            <input type="hidden" id="Part Number" name="Part Number" value="{{document.get('Part Number')}}">
+            <input type="hidden" id="Description" name="Description" value="{{document.get('Description')}}">
+        </form>
+        </div>
+    <p></p>
+    <p></p>
+    <p></p>
+    <div class="justify-content-end">
+    {%if document["Image"] != ""%}
+        <img src="/{{document['Image']}}" height="800px">
+    {%endif%}
+    <form action="/upload/inventory_items/{{document['_id']}}/image" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload New Image For Item">
+    </form>
+    </div>
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Location</th>
+            <th>Items</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in document.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            {% if key == "Location"%}
+                <td><a href={{url_for("location_by_id", location_id = value)}}>{{value}}</a>
+                    <p></p>
+                    <div class="form-group"></div>
+                    <form action="/edit/inventory_items/{{document['_id']}}/{{key}}" method="post">
+                        <input id="value" name="value" required>
+                        <input type="submit" class="btn btn-secondary" value="Update Location">
+                    </form>
+                    </div>
+                </td>
+            {%elif key == "Files"%}
+                <td><form action="/upload/inventory_items/{{document['_id']}}/file" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input class="form-control" type="file" name="file" id="formFile">
+                        <input type="submit" class="btn btn-secondary" value="Upload New File For {{document.get('Part Number')}}">
+                      </div>
+                </form>
+                {%for item in value%}
+                    <a href="/{{item}}">{{item.split('/')[-1]}}</a><p></p>
+                {%endfor%}
+                </td>
+            {%elif key == "Notes"%}
+                <td>
+                    <div class="form-group col-md-6"></div>
+                    <form action="/edit/inventory_items/{{document['_id']}}/{{key}}" method="post">
+                        <input type="submit" class="btn btn-secondary" value="Update Notes">
+                        <p></p>
+                        <textarea class="notes" id="value" name="value" rows="3" cols="100%">{{value}}</textarea>
+
+                    </form>
+                    </div>
+                    
+                </td>
+            {%elif key == "Quantity"%}
+                <td>
+                    <div class="form-group col-md-6">
+                        <form action="/edit/inventory_items/{{document['_id']}}/{{key}}" method="post">
+                            <input type="number" id="value" name="value" value="{{value}}" required>
+                            <input type="submit" class="btn btn-secondary" value="Update Quantity">
+                            {%if value == "0" %}
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#archive_item">Archive Item</button>
+                            {%endif%}
+                        </form>
+                    </div>
+                </td>
+            {%else%}
+            <td>{{value}}</td>
+            {%endif%}
+        </tr>
+        {% endfor %}
+
+        </div>
+        </tbody>
+    </table>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="archive_item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                        <p>Are you sure you want to archive this entry?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-danger" href="/archive_item/{{document.get("_id")}}">Yes</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+{%endblock%}

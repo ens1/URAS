@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+    <link href='https://fonts.googleapis.com/css?family=Libre Barcode 39' rel='stylesheet'>
+<style>
+	.barcode {
+            font-family:  'Libre Barcode 39';font-size: 22px;
+            }
+</style>
+</head>
+<div class="container">
+    <div class="row">
+      <div class="col">
+        <ul class="nav nav-pills">
+          <li class="nav-item"><a href="{{url_for('index')}}" class="nav-link" aria-current="page">Home</a></li>
+          <li class="nav-item"><a href="{{url_for('items')}}" class="nav-link">Items</a></li>
+          <li class="nav-item"><a href="{{url_for('locations')}}" class="nav-link">Locations</a></li>
+        </ul>
+      </div>
+      <div class="col-auto">
+        <div class="d-flex">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#scanqr">Search By QR</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_item">Add Item</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_location">Add Location</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {%block body%}
+  {%endblock%}
+
+
+
+<!--  Add Item Modal -->
+<div class="modal fade" id="add_item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Item</h5>
+          <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+        </div>
+        <div class="modal-body">
+            <form action="/new_item" method="POST">
+                <div class="form-group col-md-6">
+                    <label for="part_number">Part Number:</label>
+                    <input type="text" id="part_number" name="part_number" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="description">Description:</label>
+                    <input id="description" name="description" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Location">Location:</label>
+                    <input id="location" name="location">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="user">User:</label>
+                    <input type="text" id="user" name="user" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add Item</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--  Add Location Modal -->
+<div class="modal fade" id="add_location" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Item</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body">
+          <form action="/new_location" method="POST">
+              <div class="form-group col-md-6">
+                  <label for="name">Location Name:</label>
+                  <input type="text" id="name" name="name" required>
+              </div>
+              <div class="form-group col-md-6">
+                  <label for="user">User:</label>
+                  <input type="text" id="user" name="user" required>
+              </div>
+              <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Add Item</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  Search By Qr -->
+<div class="modal fade" id="scanqr" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h1 class="modal-title w-100" id="exampleModalLabel">Scan QR Code</h1>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <!-- <div class="modal-body"> -->
+          <form action="/scanqr" method="POST">
+              <div class="form-group col-md-6">
+
+                  <div class="visually-hidden">
+                  <input type="input" id="qrvalue" name="qrvalue" autofocus="autofocus" required>
+                <!-- </div> -->
+              </div>
+              <!-- <div class="modal-footer">
+              </div> -->
+          </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+ <!-- Include Bootstrap JS -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+ <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+ <script>
+  $('#scanqr').on('shown.bs.modal', function () {
+    $('#qrvalue').trigger('focus')
+  })
+</script>
+
+</html>

@@ -1,0 +1,37 @@
+{%extends 'base.html' %}
+{% block title %}All Items{% endblock %}
+{%block body%}
+    <h1>All Items</h1>
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Date Added</th>
+            <th>ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for document in documents %}
+        <tr>
+            <td><a href={{url_for("item_by_id", item_id = document.get('_id'))}}>{{ document.get('Part Number', 'N/A') }}</a></td>
+            <td>{{ document.get('Description', 'N/A') }}</td>
+            <td>{{ document.get('Quantity', 'N/A') }}</td>
+            <td><a href={{url_for("location_by_id", location_id = document.get('Location'))}}>{{ document.get('Location', 'N/A') }}</a></td>
+            <td>{{ document.get('Date Added', 'N/A') }}</td>
+            <td>{{document.get("_id")}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(document).ready(function () {
+          $('#data').DataTable();
+        });
+    </script>
+{%endblock%}
