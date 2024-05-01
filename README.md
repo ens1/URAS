@@ -6,9 +6,9 @@ URAS is an inventory management system that uses Flask, MongoDB, Bootstrap, and 
 1. Make sure you have MongoDB running
 2. Clone the repository
 3. install the required packages with pip
-4. Run URAS with your favorite WSGI application - I like Waitress
+4. Run URAS with your favorite WSGI application - I like Gunicorn
 
-     ``waitress-serve --port 1234 wsgi:app``
+     ``gunicorn -w 4 -b 127.0.0.1:12345 'wsgi:app'``
 
     or flask itself
 
