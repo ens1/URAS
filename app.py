@@ -4,8 +4,14 @@ from bson.objectid import ObjectId
 from pathlib import Path
 from datetime import datetime
 import qrcode
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+
 app = Flask(__name__)
 
+app.wsgi_app = ProxyFix(
+    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["URAS"]
