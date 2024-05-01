@@ -154,7 +154,10 @@ def printqr(id):
 @app.route('/scanqr/', methods=["GET", "POST"])
 def scanqr():
     id = request.form["qrvalue"]
-    if inventory_items.find_one({"_id": ObjectId(id)}):
-        return redirect(url_for('item_by_id', item_id=id))
-    elif inventory_locations.find_one({"Name": id}):
-        return redirect(url_for('location_by_id', str(inventory_locations.find_one({"Name": id})["_id"])))
+    try:
+        if inventory_locations.find_one({"Name": id}):
+            return redirect(url_for('location_by_id', str(inventory_locations.find_one({"Name": id})["_id"])))
+        elif inventory_items.find_one({"_id": ObjectId(id)}):
+            return redirect(url_for('item_by_id', item_id=id))
+    except:
+        return "Invalid QR"
