@@ -143,12 +143,13 @@ def archive_item(id):
 
 @app.route('/printqr/<id>/', methods=["GET", "POST"])
 def printqr(id):
-    img = qrcode.make(id)
-    type(img)  # qrcode.image.pil.PilImage
-    Path("static/tmp/").mkdir(parents=True, exist_ok=True)
-    img.save("static/tmp/qr.png")
-    info = request.form
-    return render_template('label.html', info=info)
+    if request.method == "POST":
+        img = qrcode.make(id)
+        type(img)  # qrcode.image.pil.PilImage
+        Path("static/tmp/").mkdir(parents=True, exist_ok=True)
+        img.save("static/tmp/qr.png")
+        info = request.form
+        return render_template('label.html', info=info)
 
 @app.route('/scanqr/', methods=["GET", "POST"])
 def scanqr():
